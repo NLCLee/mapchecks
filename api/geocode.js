@@ -26,8 +26,8 @@ export default async function handler(req, res) {
 			{
 				method: "GET",
 				headers: {
-					NCP_API_KEY_ID: process.env.NCT_ID,
-					NCP_API_KEY: process.env.NCT_SECRET,
+					X-NCP-APIGW-API-KEY-ID: process.env.NCP_API_KEY_ID,
+					X-NCP-APIGW-API-KEY: process.env.NCP_API_KEY,
 					Accept: "application/json",
 				},
 			}
@@ -55,5 +55,6 @@ export default async function handler(req, res) {
 		});
 	}
 }
+
 
 

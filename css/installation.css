@@ -1,0 +1,95 @@
+/* reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+   font-family: "Pretendard", system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans KR", sans-serif;
+    background: #ffffff;
+    color: #111;
+}
+
+/* layout */
+.container {
+    /* min-height: 100vh; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 7rem;
+}
+
+/* logo */
+.logo-area {
+    display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.logo {
+   height: 70px; /* 필요하면 조절 */
+  width: auto;
+  display: block;
+  object-fit: cover;
+}
+
+.brand-name {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+/* content */
+.content {
+    text-align: center;
+}
+
+.title {
+    margin: 0 0 18px;
+  font-size: clamp(28px, 4vw, 60px);
+  font-weight: 700;
+  letter-spacing: 0.1rem;
+}
+
+.subtitle {
+    margin: 4rem 0 4rem;
+  font-size: 23px;
+  font-weight: 500;
+  letter-spacing: 0.1px;
+  color: var(--text); /* #333333 */
+}
+
+/* 버튼 영역 */
+.button-wrap {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+/* 기본 버튼 */
+.type-btn {
+    width: 160px;
+    height: 160px;
+    border: none;
+    border-radius: 16px;
+    background-color: #f2f2f2;
+    color: #222;
+    font-size: 28px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+/* hover */
+.type-btn:hover {
+    background-color: #006cff;
+    color: #ffffff;
+}
+
+/* 선택된 상태 (초기값 or JS 연동용) */
+/* .type-btn.active {
+    background-color: #006cff;
+    color: #ffffff;
+} */

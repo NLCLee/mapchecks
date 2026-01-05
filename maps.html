@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>전화상담도우미</title>
+    <!-- Pretendard -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+    <!-- css 외부시트 -->
+    <link rel="stylesheet" href="css/map.css" />
+    <!-- javascript 외부시트 -->
+     <script src="js/mpa.js" defer></script>
+  </head>
+
+  <body>
+    <main class="page">
+      <header class="hero">
+        <div class="brand">
+          <a href="index.html">
+            <img
+              class="brand__mark"
+              src="img/logo.png"
+              alt="SUNDOO"
+            />
+          </a>
+          </div>
+
+        <h1 class="hero__title">전화 상담 도우미</h1>
+        <p class="hero__subtitle">설치하실 지역을 입력해주세요.</p>
+      </header>
+
+      <section class="search" aria-label="지역 검색">
+        <form class="search__form" id="searchForm">
+          <label class="search__label" for="q">지역/주소</label>
+
+          <div class="search__row">
+            <input
+              class="search__input"
+              id="q"
+              name="q"
+              type="text"
+              inputmode="search"
+              autocomplete="off"
+              placeholder="ex) 인천, 서울..."
+            />
+            
+            <button class="search__button" type="submit">
+              검색
+            </button>
+          </div>
+
+          <p class="search__hint">
+            입력 후 엔터 또는 검색을 누르면 네이버지도로 이동합니다.
+          </p>
+        </form>
+    </main>
+  </body>
+</html>

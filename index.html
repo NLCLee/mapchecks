@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>전화상담도우미</title>
+
+  <!-- Pretendard -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+
+  <!-- CSS 파일 연결 -->
+  <link rel="stylesheet" href="css/mobile.css" />
+</head>
+<body>
+  <main class="page">
+    <section class="wrap" aria-label="메인 화면">
+      <!-- 로고 이미지 경로만 바꿔서 쓰면 됨 -->
+      <div class="logo">
+        <a href="index.html">
+          <img src="img/logo.png" alt="SUNDOO 로고" />
+        </a>
+      </div>
+
+      <h1 class="title">전화 상담 도우미</h1>
+      <p class="subtitle">상담 타입을 선택해주세요.</p>
+
+      <!-- role="listitem" = 목록의 항목이라는걸 의미 -->
+      <div class="grid" role="list">
+        <button class="card" type="button" role="listitem" onclick="location.href='maps.html?type=boiler'">보일러</button>
+        <button class="card" type="button" role="listitem" onclick="location.href='maps.html?type=boiler'">가스온수기</button>
+        <button class="card" type="button" role="listitem" onclick="location.href='maps.html?type=boiler'">건조기</button>
+        <button class="card" type="button" role="listitem" onclick="location.href='maps.html?type=boiler'">전기온수기</button>
+        <button class="card" type="button" role="listitem" onclick="location.href='maps.html?type=boiler'">빌트인</button>
+        <button class="card" type="button" role="listitem" onclick="location.href='maps.html?type=boiler'">보조샤시</button>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

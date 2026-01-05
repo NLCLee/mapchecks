@@ -1,44 +1,55 @@
-// api/geocode.js
 export default async function handler(req, res) {
 	if (req.method !== "GET") return res.status(405).end();
 
 	const { address } = req.query;
-	if (!address) return res.status(400).json({ error: "주소가 없습니다." });
+	const kakaoKey = (process.env.KAKAO_REST_KEY || "").trim();
 
 	try {
-		// 카카오 로컬 API 호출
-		const response = await fetch(
-			`https://dapi.kakao.com/v2/local/search/address.json?query=${encodeURIComponent(
-				address
-			)}`,
-			{
-				headers: {
-					// 'KakaoAK ' 뒤에 한 칸 띄우고 키를 넣어야 합니다.
-					Authorization: `KakaoAK ${process.env.KAKAO_REST_KEY}`,
-				},
-			}
+		// --- 1차 시도: 주소 검색 (address.json) ---
+		const addrUrl = new URL(
+			"https://dapi.kakao.com/v2/local/search/address.json"
 		);
+		addrUrl.searchParams.append("query", address);
 
-		const data = await response.json();
+		const addrRes = await fetch(addrUrl.toString(), {
+			headers: { Authorization: `KakaoAK ${kakaoKey}` },
+		});
+		const addrData = await addrRes.json();
 
-		if (!response.ok) {
-			return res.status(response.status).json(data);
+		// 주소 검색 결과가 있으면 즉시 반환
+		if (addrData.documents && addrData.documents.length > 0) {
+			return res.status(200).json({
+				x: addrData.documents[0].x,
+				y: addrData.documents[0].y,
+				address_name: addrData.documents[0].address_name,
+			});
 		}
 
-		// 결과가 없을 경우 처리
-		if (data.documents.length === 0) {
-			return res.status(404).json({ error: "검색 결과가 없습니다." });
+		// --- 2차 시도: 키워드(장소) 검색 (keyword.json) ---
+		// 주소 검색 결과가 없을 때만 실행됩니다.
+		const keywordUrl = new URL(
+			"https://dapi.kakao.com/v2/local/search/keyword.json"
+		);
+		keywordUrl.searchParams.append("query", address);
+
+		const keyRes = await fetch(keywordUrl.toString(), {
+			headers: { Authorization: `KakaoAK ${kakaoKey}` },
+		});
+		const keyData = await keyRes.json();
+
+		if (keyData.documents && keyData.documents.length > 0) {
+			return res.status(200).json({
+				x: keyData.documents[0].x,
+				y: keyData.documents[0].y,
+				address_name: keyData.documents[0].place_name, // 장소명 반환
+			});
 		}
 
-		// 네이버 지도와 호환되도록 데이터 구조 정리 (첫 번째 결과값만 반환)
-		const result = {
-			x: data.documents[0].x, // 경도
-			y: data.documents[0].y, // 위도
-			address_name: data.documents[0].address_name,
-		};
-
-		return res.status(200).json(result);
+		// 둘 다 없으면 404
+		return res
+			.status(404)
+			.json({ error: "검색 결과가 없습니다. 주소를 더 정확히 입력해주세요." });
 	} catch (error) {
-		return res.status(500).json({ error: error.message });
+		return res.status(500).json({ error: "서버 에러가 발생했습니다." });
 	}
 }

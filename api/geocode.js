@@ -1,33 +1,20 @@
 // api/geocode.js
 export default async function handler(req, res) {
+	if (req.method !== "GET") return res.status(405).end();
+
+	const { address } = req.query;
+	if (!address) return res.status(400).json({ error: "주소가 없습니다." });
+
 	try {
-		const { address } = req.query;
-
-		if (!address) {
-			return res.status(400).json({ error: "Address is required" });
-		}
-
-		// 환경변수 로드 확인
-		const clientId = process.env.NCT_ID;
-		const clientSecret = process.env.NCT_SECRET;
-
-		if (!clientId || !clientSecret) {
-			console.error("Environment variables missing!");
-			return res
-				.status(500)
-				.json({ error: "Server environment variable missing" });
-		}
-
+		// 카카오 로컬 API 호출
 		const response = await fetch(
-			`https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=${encodeURIComponent(
+			`https://dapi.kakao.com/v2/local/search/address.json?query=${encodeURIComponent(
 				address
 			)}`,
 			{
-				method: "GET",
 				headers: {
-					"X-NCP-APIGW-API-KEY-ID": clientId,
-					"X-NCP-APIGW-API-KEY": clientSecret,
-					Accept: "application/json",
+					// 'KakaoAK ' 뒤에 한 칸 띄우고 키를 넣어야 합니다.
+					Authorization: `KakaoAK ${process.env.KAKAO_REST_KEY}`,
 				},
 			}
 		);
@@ -38,10 +25,20 @@ export default async function handler(req, res) {
 			return res.status(response.status).json(data);
 		}
 
-		return res.status(200).json(data);
+		// 결과가 없을 경우 처리
+		if (data.documents.length === 0) {
+			return res.status(404).json({ error: "검색 결과가 없습니다." });
+		}
+
+		// 네이버 지도와 호환되도록 데이터 구조 정리 (첫 번째 결과값만 반환)
+		const result = {
+			x: data.documents[0].x, // 경도
+			y: data.documents[0].y, // 위도
+			address_name: data.documents[0].address_name,
+		};
+
+		return res.status(200).json(result);
 	} catch (error) {
-		// 500 에러 발생 시 원인을 Vercel 로그에 기록
-		console.error("Geocode API Error:", error.message);
 		return res.status(500).json({ error: error.message });
 	}
 }

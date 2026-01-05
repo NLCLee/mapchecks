@@ -6,7 +6,7 @@
 
 	// ✅ 회사 주소 고정
 	const COMPANY = {
-		name: "순두에너지",
+		name: "선두에너지",
 		address: "인천 서구 청마로34번길 32-9",
 	};
 
@@ -42,20 +42,19 @@
 			throw new Error("GEOCODE_NON_JSON_RESPONSE");
 		}
 
-		// ✅ NCP 에러(210 등)면 그대로 올려서 원인 숨기지 않기
-		if (data?.error?.errorCode) {
-			const code = data.error.errorCode;
-			const msg = data.error.details || data.error.message || "API error";
-			throw new Error(`NCP_ERROR_${code}: ${msg}`);
+		// ✅ 카카오 API 에러 처리 (네이버 에러 구조와 다르므로 단순화)
+		if (!res.ok) {
+			const msg = data.message || "API error";
+			throw new Error(`KAKAOMAP_ERROR: ${msg}`);
 		}
 
-		const first = data?.addresses?.[0];
-		if (!first?.x || !first?.y) return null;
+		// ✅ 카카오 응답 구조 반영 (data.x, data.y가 바로 오는 구조)
+		if (!data?.x || !data?.y) return null;
 
 		return {
-			x: Number(first.x),
-			y: Number(first.y),
-			label: first.roadAddress || first.jibunAddress || address,
+			x: Number(data.x),
+			y: Number(data.y),
+			label: data.address_name || address, // 카카오에서 준 주소명 혹은 입력값
 		};
 	}
 

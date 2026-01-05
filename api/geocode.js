@@ -1,4 +1,7 @@
 // api/geocode.js
+const data = await naverResponse.json();
+console.log("네이버 응답 데이터:", JSON.stringify(data)); // Vercel 로그에서 확인 가능
+
 
 export default async function handler(req, res) {
 	// 1. GET 요청인지 확인
@@ -52,4 +55,5 @@ export default async function handler(req, res) {
 		});
 	}
 }
+
 
